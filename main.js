@@ -50,11 +50,13 @@ const plot = (dataset,svg) => {
   
   if(dataset.length >=2){
 
+    svg.selectAll("line").remove();
+
     var line = svg.append("line").
-      attr("x1", px(0)).
-      attr("y1", y(9)).
-      attr("x2", px(9)).
-      attr("y2", y(5)).
+      attr("x1", px( dataset[0]["px"] ) ).
+      attr("y1", y( y[0] ) ).
+      attr("x2", px( dataset[dataset.length-1]["px"] ) ).
+      attr("y2", y( [1] ) ).
       attr("stroke-width", 2).
       attr("stroke", "black")
     ;
