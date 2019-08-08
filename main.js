@@ -31,9 +31,9 @@ var svg = d3.select("#dataviz_brushCSS").append("svg").attr("width", width + mar
 
 const plot = (dataset,svg) => {
 
-  var y = d3.scaleLinear().domain([0, 9]).range([ height, 0]);
+  var py = d3.scaleLinear().domain([0, 9]).range([ height, 0]);
   
-  svg.append("g").call(d3.axisLeft(y));
+  svg.append("g").call(d3.axisLeft(py));
 
   var px = d3.scaleLinear().domain([0, 9]).range([ 0, width ]);
 
@@ -42,7 +42,7 @@ const plot = (dataset,svg) => {
   const circle = svg.selectAll('circle').data(dataset);
   
   circle.enter().append("circle").attr("cx",function(d) {return  px(dataset[dataset.length - 1]["px"])}) // hasta el 500
-    .attr("cy", function(d){return  y(dataset[dataset.length - 1]["py"])}) // hasta el 500 
+    .attr("cy", function(d){return  py (dataset[dataset.length - 1]["py"]) }) // hasta el 500 
     .attr("r",8)
     .style("fill", function (d) { return color(dataset[dataset.length - 1]["indice"]) } )
     .style("opacity", 1)
@@ -53,10 +53,10 @@ const plot = (dataset,svg) => {
     svg.selectAll("line").remove();
 
     var line = svg.append("line").
-      attr("x1", px( dataset[0]["px"] ) ).
-      attr("y1", y( y[0] ) ).
-      attr("x2", px( dataset[dataset.length-1]["px"] ) ).
-      attr("y2", y( [1] ) ).
+      attr("x1", function (d) {return px(x[0]) }).
+      attr("y1", function (d) {return py(y[0]) }).
+      attr("x2", function (d) {return px(x[1]) }).
+      attr("y2", function (d) {return py(y[1]) }).
       attr("stroke-width", 2).
       attr("stroke", "black")
     ;
