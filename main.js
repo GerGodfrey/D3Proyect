@@ -22,6 +22,7 @@ buttonR.onclick  = function (){
 };
 
 
+
 const alpha = 0.0005;
 const x = [0,9];
 const epo = 5;
@@ -41,9 +42,6 @@ var color = d3.scaleOrdinal().domain(["0","1"]).range(["#fde725ff", "#21908dff"]
 
 //Make an SVG Container
 var svg = d3.select("#dataviz_brushCSS").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
-
-
-
 
 const plot = (dataset,svg) => {
 
@@ -107,6 +105,12 @@ function epochs(){
       y[1] = ( (x[1] * w[1]) + w[0]) * ( -1 / w[2]);
   }
 }
+
+svg.onclick(function(){
+  var coordenadas = d3.mouse(this);
+  console.log(coordenadas);
+});
+
 
 
 
