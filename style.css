@@ -8,9 +8,9 @@ body {
     height: 100%;
   }
   
-  .main {
+  /* .main {
     text-align: center;
-  }
+  } */
   
   button {
     padding: 20px;
@@ -18,9 +18,23 @@ body {
     text-shadow: 1px 1px 1px #202020;
     font-family: "Lato", sans-serif;
     font-size: 18pt;
-    border: 1px solid lightsalmon;
-    color: lightcoral;
+    margin: 20px 50px;
   }
+
+  #clickme {
+    border: 1px solid #fdfa2b;
+    color: #f5e943;
+  }
+
+  #click_right{
+    border: 1px solid #2e7da1;
+    color: #3da6d6; 
+  }
+
+  /* button{
+    align-items: flex-start;
+    padding: 20px 15px 20px 20px;
+  } */
 
   .selected {
     opacity: 1;
@@ -29,6 +43,6 @@ body {
   }
 
   svg text{
-    size: 15px;
+    size: 10px;
   }
   

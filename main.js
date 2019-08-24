@@ -1,7 +1,7 @@
 var button = document.getElementById("clickme");
-var buttonR = document.getElementById("click_right");
-var countR = 0;
-var countI = 0;
+var buttonB = document.getElementById("click_right");
+var countB = 0;
+var countY = 0;
 
 const alpha = 0.0005;
 const x = [0,9];
@@ -30,11 +30,7 @@ var svg = d3.select("#dataviz_brushCSS")
 ;
 
 var xScale = d3.scaleLinear().domain([0, 9]).range([ 0, width ]);
-var yScale = d3.scaleLinear().domain([9,0]).range([0, height]);
-
-//LIENAS DE LA GRAFICA
-var xAxis = d3.axisBottom(xScale);
-var yAxis = d3.axisRight(yScale).tickSize(-width);
+var yScale = d3.scaleLinear().domain([0,9]).range([height,0]);
 
 svg.append("g")
   .attr("class", "axis")
@@ -49,14 +45,19 @@ svg.append("g")
 
 d3.select("#dataviz_brushCSS").on("click", function(){
   var coordenadas = d3.mouse(this);
-  
-  console.log(coordenadas[0]);
-  console.log((coordenadas[0]) / (600/9));
-
-  var posXi = (Math.random()*5);
-  var posYi = (Math.random() * (9 - 5) + 5);
-  dataset.push({"indice":1, "px": ((coordenadas[0]-(60)) / (510/9)), "py": 4 });
-  
+  // console.log((coordenadas[0]) / (600/9));
+  var pxI = (coordenadas[0]-(60)) / (510/9);
+  var pyI = (589-coordenadas[1]-20) / (560/9);
+  if( (pxI + pyI > 9)){
+    var ind = 1
+    countB++;
+    buttonB.innerHTML = "Blue: " + countB;
+  }else{
+    var ind =0
+    countY++;
+    button.innerHTML = "Yellow: " + countY;
+  };
+  dataset.push({"indice":ind, "px": (pxI), "py": (pyI) });
   plot(dataset,svg);
   epochs();
 });
@@ -149,48 +150,21 @@ function handleMouseLeave(d,i){
 }
 
 button.onclick = function() {
-  countI = countI + 1;
+  countY++;
   //VALORES ASIGNADOS DEL 0 AL 9
   var posXi = (Math.random()*5);
   var posYi = Math.abs((Math.random() * 9) - posXi) ;
   dataset.push({"indice":0, "px": posXi, "py": posYi});
-  button.innerHTML = "Yellow: " + countI;
+  button.innerHTML = "Yellow: " + countY;
   plot(dataset,svg);
   epochs();
 };
 
-buttonR.onclick  = function (){
-  countR++;
+buttonB.onclick  = function (){
+  countB++;
   var posXd = Math.random() * (9 - 3.5) + 3.5;
   dataset.push({"indice":1, "px": (posXd), "py": (Math.random() * (9 - 5) + 5) });
-  buttonR.innerHTML = "Blue: " + countR;
+  buttonB.innerHTML = "Blue: " + countB;
   plot(dataset,svg);
   epochs();
 };
-
-
-  // d3.selectAll("circle").transition()
-  //   .delay(function(d, i) { return i * 50; })
-  //   .on("start", function repeat() {
-  //       d3.active(this)
-  //           .style("fill", "red")
-  //         .transition()
-  //           .style("fill", "green")
-  //         .transition()
-  //           .style("fill", "blue")
-  //         .transition()
-  //           .on("start", repeat);
-  // });
-
-  // var line = svg.append("line")
-  // .attr("x1",px(6.5))
-  // .attr("y1",py(0))
-  // .attr("x2",px(0))
-  // .attr("y2",py(6.5))
-  // .attr("stroke-width", 2)
-  // .attr("stroke", function(){
-  //   return '#'+Math.floor(Math.random()*16777215).toString(16);});
-
-
-
-
