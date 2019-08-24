@@ -4,10 +4,11 @@ body {
     font-family: "Lato", sans-serif;
     font-size: 20pt;
     font-weight: normal;
+    width: 100%;
+    height: 100%;
   }
   
   .main {
-    margin: 100px ato;
     text-align: center;
   }
   
@@ -25,5 +26,9 @@ body {
     opacity: 1;
     stroke: black;
     stroke-width: 1px;
+  }
+
+  svg text{
+    size: 15px;
   }
   

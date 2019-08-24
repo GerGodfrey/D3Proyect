@@ -3,26 +3,6 @@ var buttonR = document.getElementById("click_right");
 var countR = 0;
 var countI = 0;
 
-button.onclick = function() {
-  countI = countI + 1;
-  var posXi = (Math.random()*5);
-  dataset.push({"indice":0, "px": posXi, "py": (Math.random() * 9)- posXi});
-  button.innerHTML = "Yellow: " + countI;
-  plot(dataset,svg);
-  epochs();
-};
-
-buttonR.onclick  = function (){
-  countR++;
-  var posXd = Math.random() * (9 - 3.5) + 3.5;
-  dataset.push({"indice":1, "px": (posXd), "py": (Math.random() * (9 - 5) + 5) });
-  buttonR.innerHTML = "Blue: " + countR;
-  plot(dataset,svg);
-  epochs();
-};
-
-
-
 const alpha = 0.0005;
 const x = [0,9];
 const epo = 5;
@@ -35,51 +15,77 @@ var yhat = 0 ;
 
 //DECLARAR EL MARGEN Y CON BASE EN ESO EL TAMAÑO DE LA ALTURA Y ANCHURA
 var margin = {top: 10, right: 30, bottom: 30, left: 60};
-var width = (660 - margin.left - margin.right);
-var height = (600 - margin.top - margin.bottom);
+var width = (600 - margin.left - margin.right); //510
+var height = (600 - margin.top - margin.bottom); //560
 //QUE COLOR SERA DEPENDIENDO DEL RANGO EN EL QUE ESTE 
 var color = d3.scaleOrdinal().domain(["0","1"]).range(["#fde725ff", "#21908dff"]);
 
 //Make an SVG Container
-var svg = d3.select("#dataviz_brushCSS").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+var svg = d3.select("#dataviz_brushCSS")
+  .append("svg")
+  .attr("width", 600 ) //width + margin.left + margin.right
+  .attr("height", 600) //height + margin.top + margin.bottom
+  .append("g")
+  .attr("transform", "translate(" + 40 + ", " + margin.top + ")")
+;
+
+var xScale = d3.scaleLinear().domain([0, 9]).range([ 0, width ]);
+var yScale = d3.scaleLinear().domain([9,0]).range([0, height]);
+
+//LIENAS DE LA GRAFICA
+var xAxis = d3.axisBottom(xScale);
+var yAxis = d3.axisRight(yScale).tickSize(-width);
+
+svg.append("g")
+  .attr("class", "axis")
+  .call(d3.axisLeft(yScale))
+;
+svg.append("g")
+  .attr("class", "axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(xScale))
+;
+
+
+d3.select("#dataviz_brushCSS").on("click", function(){
+  var coordenadas = d3.mouse(this);
+  
+  console.log(coordenadas[0]);
+  console.log((coordenadas[0]) / (600/9));
+
+  var posXi = (Math.random()*5);
+  var posYi = (Math.random() * (9 - 5) + 5);
+  dataset.push({"indice":1, "px": ((coordenadas[0]-(60)) / (510/9)), "py": 4 });
+  
+  plot(dataset,svg);
+  epochs();
+});
+
 
 const plot = (dataset,svg) => {
-
-  
-  var py = d3.scaleLinear().domain([0, 9]).range([ height, 0]);
-  svg.append("g").call(d3.axisLeft(py));
-  var px = d3.scaleLinear().domain([0, 9]).range([ 0, width ]);
-  svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(px));   
-
   const circle = svg.selectAll('circle').data(dataset);
 
-  circle.enter().append("circle").attr("cx",function(d) {return  px(dataset[dataset.length - 1]["px"])}) // hasta el 570
-    .attr("cy", function(d){return  py (dataset[dataset.length - 1]["py"]) }) // hasta el 500 
+  circle.enter().append("circle")
+
+    .attr("cx",function(d) {return  xScale(dataset[dataset.length - 1]["px"])}) // hasta el 570
+    .attr("cy",function(d){return  yScale (dataset[dataset.length - 1]["py"]) }) // hasta el 500 
     .attr("r",8)
     .style("fill", function (d) { return color(dataset[dataset.length - 1]["indice"]) } )
-    .style("opacity", 1)
+    .style("fill-opacity", 1)
+    .on("mouseenter",handleMouseOver)
+    .on("mouseleave",handleMouseLeave)
   ;
 
-  // var line = svg.append("line")
-  // .attr("x1",px(6.5))
-  // .attr("y1",py(0))
-  // .attr("x2",px(0))
-  // .attr("y2",py(6.5))
-  // .attr("stroke-width", 2)
-  // .attr("stroke", function(){
-  //   return '#'+Math.floor(Math.random()*16777215).toString(16);});
-
   svg.selectAll("line").remove();
-  
-  var line = svg.append("line").
-  attr("x1", function (d) {return px(x[0]) }).
-  attr("y1", function (d) {return py(y[0]) }).
-  attr("x2", function (d) {return px(x[1]) }).
-  attr("y2", function (d) {return py(y[1]) }).
-  attr("stroke-width", 5).
-  attr("stroke", "red");
 
-  // document.getElementById("showAnswer").innerHTML = px(x[0]);
+  var line = svg.append("line").
+    attr("x1", function (d) {return xScale(x[0]) }).
+    attr("y1", function (d) {return yScale(y[0]) }).
+    attr("x2", function (d) {return xScale(x[1]) }).
+    attr("y2", function (d) {return yScale(y[1]) }).
+    attr("stroke-width", 2).
+    attr("stroke", "black")
+  ;
 
 };
 
@@ -87,7 +93,6 @@ function epochs(){
   var e;
   var n;
   if(dataset.length >=2){
-    console.log(dataset);
       for(e = 0; e < epo; e++ ){
         for(n = 0; n < dataset.length; n++){
           sumAprox = [0,0,0];
@@ -106,10 +111,85 @@ function epochs(){
   }
 }
 
-svg.onclick(function(){
-  var coordenadas = d3.mouse(this);
-  console.log(coordenadas);
-});
+function handleMouseOver(d,i){
+
+  d3.selectAll("circle")
+    .style("fill-opacity", .5)
+  ;
+  d3.select(this)
+    .transition()
+      .ease(d3.easeElastic)
+      .duration('500')
+      .style("fill-opacity",1)
+      .attr("r",16)
+  ;
+  svg.append("text")
+    .attr("id","t" + d.x + "-" + d.y + "-" + i) 
+    .attr("x",function() {return xScale(d.px) - 50})
+    .attr("y",function() {return yScale(d.py) + 60})
+    .attr("dy",-5)
+    .text(function(){
+      return ["(" + d3.format(".1f")(d.px),d3.format(".1f")(d.py) + ")"];
+    });
+}
+
+function handleMouseLeave(d,i){
+  d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();
+
+  d3.select(this)
+  .text("gh")
+  .transition()
+  .ease(d3.easeElastic)
+  .duration('500')
+  .attr("r",8)
+  ;
+  d3.selectAll("circle")
+    .style("fill-opacity", 1)
+  ;
+}
+
+button.onclick = function() {
+  countI = countI + 1;
+  //VALORES ASIGNADOS DEL 0 AL 9
+  var posXi = (Math.random()*5);
+  var posYi = Math.abs((Math.random() * 9) - posXi) ;
+  dataset.push({"indice":0, "px": posXi, "py": posYi});
+  button.innerHTML = "Yellow: " + countI;
+  plot(dataset,svg);
+  epochs();
+};
+
+buttonR.onclick  = function (){
+  countR++;
+  var posXd = Math.random() * (9 - 3.5) + 3.5;
+  dataset.push({"indice":1, "px": (posXd), "py": (Math.random() * (9 - 5) + 5) });
+  buttonR.innerHTML = "Blue: " + countR;
+  plot(dataset,svg);
+  epochs();
+};
+
+
+  // d3.selectAll("circle").transition()
+  //   .delay(function(d, i) { return i * 50; })
+  //   .on("start", function repeat() {
+  //       d3.active(this)
+  //           .style("fill", "red")
+  //         .transition()
+  //           .style("fill", "green")
+  //         .transition()
+  //           .style("fill", "blue")
+  //         .transition()
+  //           .on("start", repeat);
+  // });
+
+  // var line = svg.append("line")
+  // .attr("x1",px(6.5))
+  // .attr("y1",py(0))
+  // .attr("x2",px(0))
+  // .attr("y2",py(6.5))
+  // .attr("stroke-width", 2)
+  // .attr("stroke", function(){
+  //   return '#'+Math.floor(Math.random()*16777215).toString(16);});
 
 
 
