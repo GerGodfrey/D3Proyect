@@ -26,7 +26,7 @@ var svg = d3.select("#dataviz_brushCSS")
   .attr("width", 600 ) //width + margin.left + margin.right
   .attr("height", 600) //height + margin.top + margin.bottom
   .append("g")
-  .attr("transform", "translate(" + 40 + ", " + margin.top + ")")
+  .attr("transform", "translate(" + 60 + ", " + margin.top + ")")
 ;
 
 var xScale = d3.scaleLinear().domain([0, 9]).range([ 0, width ]);
