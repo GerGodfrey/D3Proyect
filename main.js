@@ -5,7 +5,7 @@ var countY = 0;
 
 const alpha = 0.0005;
 const x = [0,9];
-const epo = 5;
+const epo = 2;
 var dataset = [];
 var w = [-6.5,1,1];
 var y = [0,0];
@@ -56,7 +56,7 @@ d3.select("#dataviz_brushCSS").on("click", function(){
     var ind =0
     countY++;
     button.innerHTML = "Yellow: " + countY;
-  };
+  }
   dataset.push({"indice":ind, "px": (pxI), "py": (pyI) });
   plot(dataset,svg);
   epochs();
@@ -94,21 +94,21 @@ function epochs(){
   var e;
   var n;
   if(dataset.length >=2){
-      for(e = 0; e < epo; e++ ){
-        for(n = 0; n < dataset.length; n++){
-          sumAprox = [0,0,0];
-          z = w[0] + (w[1] * ((dataset[n]).px)) + (w[2] * (dataset[n]).py);
-          yhat = [ 1 / ( 1 + Math.pow(Math.E,(z * -1))) ];
-          sumAprox[0] = sumAprox[0] + ( 1 * ((dataset[n]["indice"]) - yhat));
-          sumAprox[1] = sumAprox[1] + (dataset[n].px * ((dataset[n].indice) - yhat));
-          sumAprox[2] = sumAprox[2] + (dataset[n].py * ((dataset[n].indice) - yhat));
-        }
-        w[0] = w[0] + (alpha * sumAprox[0]);
-        w[1] = w[1] + (alpha * sumAprox[1]);
-        w[2] = w[2] + (alpha * sumAprox[2]);    
+    for(e = 0; e < 1; e++ ){  
+      for(n = 0; n < dataset.length; n++){
+        // sumAprox = [0,0,0];
+        z = w[0] + (w[1] * ((dataset[n]).px)) + (w[2] * (dataset[n]).py);
+        yhat = [ 1 / ( 1 + Math.pow(Math.E,(z * -1))) ];
+        sumAprox[0] = sumAprox[0] + ( 1 * ((dataset[n].indice) - yhat));
+        sumAprox[1] = sumAprox[1] + (dataset[n].px * ((dataset[n].indice) - yhat));
+        sumAprox[2] = sumAprox[2] + (dataset[n].py * ((dataset[n].indice) - yhat));
       }
-      y[0] = ( (x[0] * w[1]) + w[0]) * ( -1 / w[2]);
-      y[1] = ( (x[1] * w[1]) + w[0]) * ( -1 / w[2]);
+      w[0] = w[0] + (alpha * sumAprox[0]);
+      w[1] = w[1] + (alpha * sumAprox[1]);
+      w[2] = w[2] + (alpha * sumAprox[2]);    
+    }
+    y[0] = ( (x[0] * w[1]) + w[0]) * ( -1 / w[2]);
+    y[1] = ( (x[1] * w[1]) + w[0]) * ( -1 / w[2]);
   }
 }
 

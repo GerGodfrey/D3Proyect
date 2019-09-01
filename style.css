@@ -31,11 +31,6 @@ body {
     color: #3da6d6; 
   }
 
-  /* button{
-    align-items: flex-start;
-    padding: 20px 15px 20px 20px;
-  } */
-
   .selected {
     opacity: 1;
     stroke: black;
