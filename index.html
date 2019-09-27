@@ -3,6 +3,7 @@
 <html>
 
   <head>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <title></title>
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
@@ -10,9 +11,13 @@
   </head>
   
   <body>
-    <div class="main">
-      <button id="clickme">Yellow</button>
-      <button id="click_right">Blue</button>
+    <div class="container">
+      <div class="row">
+        <button id="clickme">Yellow</button>
+        <button id="click_right">Blue</button>
+        <div class="col-xs-12 col-lg-6" id="dataviz_brushCSS"></div>
+      </div>
+
       <svg width=600 height=590 id="dataviz_brushCSS"></svg>
     </div>
 
