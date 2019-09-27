@@ -35,7 +35,7 @@ var yScale = d3.scaleLinear().domain([0,9]).range([height,0]);
 
 svg.append("g")
   .attr("class", "axis")
-  .call(d3.axisLeft(yScale))
+  .call(d3.axisLeft(yScale))   
 ;
 svg.append("g")
   .attr("class", "axis")
