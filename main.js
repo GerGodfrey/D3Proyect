@@ -23,8 +23,9 @@ var color = d3.scaleOrdinal().domain(["0","1"]).range(["#fde725ff", "#21908dff"]
 //Make an SVG Container
 var svg = d3.select("#dataviz_brushCSS")
   .append("svg")
-  .attr("width", 600 ) //width + margin.left + margin.right
-  .attr("height", 600) //height + margin.top + margin.bottom
+  .attr("viewBox", "0 0 600 600")
+  // .attr("width", 600 ) //width + margin.left + margin.right
+  // .attr("height", 600) //height + margin.top + margin.bottom
   .append("g")
   .attr("transform", "translate(" + 60 + ", " + margin.top + ")")
 ;
