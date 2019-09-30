@@ -21,11 +21,13 @@ var height = (600 - margin.top - margin.bottom); //560
 var color = d3.scaleOrdinal().domain(["0","1"]).range(["#fde725ff", "#21908dff"]);
 
 //Make an SVG Container
-var svg = d3.select("#dataviz_brushCSS")
+var svg = d3.select("#container")
   .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
   .attr("viewBox", "0 0 600 600")
   //.attr("width", 600 ) //width + margin.left + margin.right
   //.attr("height", 600) //height + margin.top + margin.bottom
+  .classed("svg-content", true)
   .append("g")
   .attr("transform", "translate(" + 60 + ", " + margin.top + ")")
 ;
@@ -44,10 +46,10 @@ svg.append("g")
 ;
 
 
-d3.select("#dataviz_brushCSS").on("click", function(){
+d3.select("#container").on("click", function(){
   var coordenadas = d3.mouse(this);
-  console.log(document.body.clientHeight);
-  console.log(document.body.clientWidth);
+  console.log(svg.viewBox.baseVal);
+  console.log("svg.viewBox.height");
   // console.log((coordenadas[0]) / (600/9));
   var pxI = (coordenadas[0]-(60)) / (510/9);
   var pyI = (589-coordenadas[1]-20) / (560/9);
