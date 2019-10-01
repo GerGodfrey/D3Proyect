@@ -48,11 +48,11 @@ svg.append("g")
 
 d3.select("#container").on("click", function(){
   var coordenadas = d3.mouse(this);
-  console.log(coordenadas[0]);
-  console.log(coordenadas[1]);
+  console.log((coordenadas[0]*9) / (980));
+  console.log(9 - (coordenadas[1]*9) / (980));
   // console.log((coordenadas[0]) / (600/9));
-  var pxI = (coordenadas[0]-(60)) / (510/9);
-  var pyI = (589-coordenadas[1]-20) / (560/9);
+  var pxI = (coordenadas[0]*9) / (980);
+  var pyI = 9 - (coordenadas[1]*9) / (980);
   if( (pxI + pyI > 9)){
     var ind = 1
     countB++;
